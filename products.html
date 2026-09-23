@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Fragrances | Perfume Store Egypt</title>
+    <meta name="description" content="Browse our full collection of authentic luxury fragrances in Egypt. Filter by Dior, Chanel, Tom Ford, YSL, and more. Shop by scent family, gender, and price range.">
+    <meta name="keywords" content="buy perfume Egypt, luxury fragrance collection, Dior Sauvage Egypt, Chanel perfume, Tom Ford Oud, YSL Y">
+    <meta property="og:title" content="All Fragrances | Perfume Store">
+    <meta property="og:description" content="Filter and shop our exclusive luxury fragrance collection. Free delivery over 2000 EGP.">
+    <meta name="theme-color" content="#0d0e12">
+    <link rel="manifest" href="manifest.json">
+    <link rel="canonical" href="products.html">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header id="siteHeader"></header>
+    <main class="products">
+        <section class="page-heading">
+            <span class="eyebrow">The Collection</span>
+            <h1 data-i18n="ourPerfumes">Our Perfumes</h1>
+            <p>Find your signature fragrance from <span id="resultCount">12</span> curated scents.</p>
+        </section>
+
+        <!-- ===== ADVANCED FILTER BAR ===== -->
+        <div class="filter-bar-wrapper">
+            <div class="filter-bar">
+
+                <!-- Search -->
+                <div class="filter-group filter-search">
+                    <input type="text" id="searchInput" data-i18n-placeholder="search" placeholder="Search perfume or note...">
+                </div>
+
+                <!-- Scent Family -->
+                <div class="filter-group">
+                    <label class="filter-label" data-i18n="familyLabel">Scent Family</label>
+                    <select id="familyFilter" class="filter-select">
+                        <option value="all" data-i18n="familyAll">All Families</option>
+                        <option value="fresh" data-i18n="familyFresh">🌬️ Fresh</option>
+                        <option value="woody" data-i18n="familyWoody">🌲 Woody</option>
+                        <option value="floral" data-i18n="familyFloral">🌸 Floral</option>
+                        <option value="oriental" data-i18n="familyOriental">🌙 Oriental / Oud</option>
+                        <option value="aquatic" data-i18n="familyAquatic">🌊 Aquatic</option>
+                        <option value="fruity" data-i18n="familyFruity">🍑 Fruity</option>
+                    </select>
+                </div>
+
+                <!-- Gender -->
+                <div class="filter-group">
+                    <label class="filter-label" data-i18n="genderLabel">For</label>
+                    <select id="genderFilter" class="filter-select">
+                        <option value="all" data-i18n="genderAll">Everyone</option>
+                        <option value="men" data-i18n="genderMen">👔 Men</option>
+                        <option value="women" data-i18n="genderWomen">👗 Women</option>
+                        <option value="unisex" data-i18n="genderUnisex">⚧ Unisex</option>
+                    </select>
+                </div>
+
+                <!-- Price -->
+                <div class="filter-group">
+                    <label class="filter-label" data-i18n="allPrices">Price</label>
+                    <select id="priceFilter" class="filter-select">
+                        <option value="all" data-i18n="allPrices">All Prices</option>
+                        <option value="low" data-i18n="low">Under 3,000 EGP</option>
+                        <option value="medium" data-i18n="medium">3,000 – 5,000 EGP</option>
+                        <option value="high" data-i18n="high">Over 5,000 EGP</option>
+                    </select>
+                </div>
+
+                <!-- Sort -->
+                <div class="filter-group">
+                    <label class="filter-label" data-i18n="sortBy">Sort By</label>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="default" data-i18n="sortDefault">Featured</option>
+                        <option value="low-high" data-i18n="sortLowHigh">Price: Low → High</option>
+                        <option value="high-low" data-i18n="sortHighLow">Price: High → Low</option>
+                        <option value="rating" data-i18n="sortRating">Highest Rated</option>
+                        <option value="reviews" data-i18n="sortReviews">Most Reviewed</option>
+                    </select>
+                </div>
+
+                <!-- Clear -->
+                <div class="filter-group filter-clear">
+                    <button id="clearFiltersBtn" class="clear-filters-btn" data-i18n="clearFilters">Clear All</button>
+                </div>
+
+            </div>
+
+            <!-- Mobile toggle -->
+            <button class="filter-toggle-btn" id="filterToggleBtn" data-i18n="showFilters">⚙️ Filters</button>
+        </div>
+
+        <div class="products-container"></div>
+    </main>
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+
+    <script>
+        // Mobile filter panel toggle
+        const filterToggleBtn = document.getElementById("filterToggleBtn");
+        const filterBar = document.querySelector(".filter-bar");
+        if (filterToggleBtn && filterBar) {
+            filterToggleBtn.addEventListener("click", () => {
+                filterBar.classList.toggle("open");
+                filterToggleBtn.textContent = filterBar.classList.contains("open") ? "✕ Close" : (localStorage.getItem("language") === "ar" ? "⚙️ الفلاتر" : "⚙️ Filters");
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "Perfume Store | عطور فاخرة",
+  "short_name": "Perfume Store",
+  "description": "Exclusive collection of authentic luxury perfumes delivered across Egypt.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d0e12",
+  "theme_color": "#c9a227",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./images/perfume1.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "./images/perfume1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

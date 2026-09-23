@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Store - Verify Code</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <main class="auth-page forgot-password-page">
+
+        <section class="auth-card">
+
+            <span class="eyebrow" data-i18n="verifyCode">
+                Verify Code
+            </span>
+
+            <h1>Perfume Store</h1>
+
+            <h2 data-i18n="enterVerificationCode">
+                Enter Verification Code
+            </h2>
+
+            <p class="forgot-description" data-i18n="verificationDescription">
+                Enter the verification code sent to your email.
+            </p>
+
+            <form id="verifyCodeForm">
+
+                <label for="verificationCode" data-i18n="verificationCode">
+                    Verification Code
+                </label>
+
+                <input
+                    type="text"
+                    id="verificationCode"
+                    inputmode="numeric"
+                    maxlength="6"
+                    required
+                    data-i18n-placeholder="verificationCodePlaceholder"
+                    placeholder="Enter 6-digit code"
+                >
+
+                <button type="submit" data-i18n="verifyCodeButton">
+                    Verify Code
+                </button>
+
+            </form>
+
+            <p class="back-login">
+                <a href="forgot-password.html" data-i18n="backToForgotPassword">
+                    ← Back
+                </a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <script>
+        window.location.replace("forgot-password.html");
+    </script>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+</body>
+
+</html>

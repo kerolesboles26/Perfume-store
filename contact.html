@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Us - Perfume Store</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <header id="siteHeader"></header>
+
+    <main class="contact-page">
+
+        <section class="page-heading">
+            <span class="eyebrow">Get In Touch</span>
+
+            <h1 data-i18n="contactTitle">
+                Contact Us
+            </h1>
+
+            <p data-i18n="contactDescription">
+                Have a question? We would love to hear from you.
+            </p>
+        </section>
+
+
+        <section class="contact-container">
+
+            <div class="contact-info">
+
+                <h2 data-i18n="contactInfoTitle">
+                    Contact Information
+                </h2>
+
+                <p>
+                    📧
+                    <strong data-i18n="email">
+                        Email
+                    </strong>
+                    <br>
+                    support@perfumestore.com
+                </p>
+
+                <p>
+                    📞
+                    <strong data-i18n="phone">
+                        Phone Number
+                    </strong>
+                    <br>
+                    +20 100 000 0000
+                </p>
+
+                <p>
+                    📍
+                    <strong data-i18n="address">
+                        Address
+                    </strong>
+                    <br>
+                    Egypt
+                </p>
+
+            </div>
+
+
+            <form id="contactForm" class="contact-form">
+
+                <label for="contactName"
+                    data-i18n="fullName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="contactName"
+                    required
+                    placeholder="Your name"
+                >
+
+
+                <label for="contactEmail"
+                    data-i18n="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="contactEmail"
+                    required
+                    placeholder="Your email"
+                >
+
+
+                <label for="contactMessage"
+                    data-i18n="message">
+                    Message
+                </label>
+
+                <textarea
+                    id="contactMessage"
+                    required
+                    placeholder="Write your message..."
+                ></textarea>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    data-i18n="sendMessage">
+                    Send Message
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer id="siteFooter"></footer>
+
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+
+
+</body>
+
+</html>

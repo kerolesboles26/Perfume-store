@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | Perfume Store Egypt</title>
+    <meta name="description" content="Complete your luxury fragrance order securely with 100% authentic guarantee and cash on delivery or credit card.">
+    <meta name="theme-color" content="#0d0e12">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header id="siteHeader"></header>
+    <main class="checkout-page-layout">
+
+        <!-- LEFT: Order Form -->
+        <section class="checkout-form-section">
+            <div class="checkout-form-card">
+                <span class="eyebrow">Secure Checkout</span>
+                <h1 data-i18n="checkoutTitle">Checkout</h1>
+
+                <form id="checkoutForm">
+                    <!-- Name -->
+                    <div class="name-fields">
+                        <div class="form-group">
+                            <label for="fullName" data-i18n="fullName">Full Name</label>
+                            <input type="text" id="fullName" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" data-i18n="phone">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="+20 1XX XXX XXXX">
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address" data-i18n="address">Address</label>
+                        <textarea id="address" required rows="3" placeholder="Street, City, Governorate..."></textarea>
+                    </div>
+
+                    <!-- Payment -->
+                    <div class="form-group">
+                        <label for="payment" data-i18n="payment">Payment Method</label>
+                        <select id="payment" required>
+                            <option value="" data-i18n="selectPayment">Select Payment Method</option>
+                            <option value="cash" data-i18n="cash">Cash on Delivery</option>
+                            <option value="card" data-i18n="card">Credit Card</option>
+                        </select>
+                    </div>
+
+                    <!-- Card box -->
+                    <div id="cardPaymentBox" class="card-payment-box interactive-payment" style="display:none;">
+                        
+                        <!-- 3D Card Visual -->
+                        <div class="card-scene">
+                            <div class="card-object" id="visualCard">
+                                <!-- Front -->
+                                <div class="card-face card-front">
+                                    <div class="card-logo" id="cardLogo">VISA</div>
+                                    <div class="card-chip"></div>
+                                    <div class="card-number-display" id="visualCardNumber">#### #### #### ####</div>
+                                    <div class="card-details-display">
+                                        <div class="card-holder-display">
+                                            <span data-i18n="cardHolder">Card Holder</span>
+                                            <div id="visualCardName">YOUR NAME</div>
+                                        </div>
+                                        <div class="card-expiry-display">
+                                            <span data-i18n="expires">Expires</span>
+                                            <div id="visualCardExpiry">MM/YY</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back -->
+                                <div class="card-face card-back">
+                                    <div class="card-magnetic-stripe"></div>
+                                    <div class="card-cvv-display">
+                                        <span>CVV</span>
+                                        <div class="cvv-strip" id="visualCardCvv">***</div>
+                                    </div>
+                                    <div class="card-back-logo">ROYAL</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inputs -->
+                        <div class="card-inputs">
+                            <div class="form-group">
+                                <label for="ccNumber" data-i18n="cardNumber">Card Number</label>
+                                <input type="text" id="ccNumber" maxlength="19" placeholder="0000 0000 0000 0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="ccName" data-i18n="cardHolder">Cardholder Name</label>
+                                <input type="text" id="ccName" placeholder="John Doe">
+                            </div>
+                            <div class="name-fields">
+                                <div class="form-group">
+                                    <label for="ccExpiry" data-i18n="expiryDate">Expiry (MM/YY)</label>
+                                    <input type="text" id="ccExpiry" maxlength="5" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ccCvv" data-i18n="cvv">CVV</label>
+                                    <input type="password" id="ccCvv" maxlength="4" placeholder="***">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== PROMO CODE ===== -->
+                    <div class="form-group promo-group">
+                        <label for="promoCodeInput" data-i18n="promoLabel">Promo Code</label>
+                        <div class="promo-row">
+                            <input type="text" id="promoCodeInput" data-i18n-placeholder="promoPlaceholder" placeholder="Enter promo code..." autocomplete="off" style="text-transform:uppercase;">
+                            <button type="button" id="applyPromoBtn" class="promo-apply-btn" data-i18n="applyPromo">Apply</button>
+                        </div>
+                        <div id="promoMessage" class="promo-message" style="display:none;"></div>
+                        <div class="promo-chips">
+                            <span class="promo-chip-label" data-i18n="availablePromos">Available Codes:</span>
+                            <button type="button" class="promo-chip" data-code="LUXURY10">LUXURY10 <span>(-10%)</span></button>
+                            <button type="button" class="promo-chip" data-code="ROYAL20">ROYAL20 <span>(-20%)</span></button>
+                            <button type="button" class="promo-chip" data-code="VIP500">VIP500 <span>(-500 EGP)</span></button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="checkout-submit-btn" data-i18n="placeOrder">Place Order 🎁</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- RIGHT: Order Summary -->
+        <aside class="checkout-summary-card">
+            <h2 data-i18n="orderSummary">Order Summary</h2>
+            <div id="checkoutSummaryItems" class="summary-items"></div>
+
+            <div class="summary-totals">
+                <div class="summary-line">
+                    <span data-i18n="subtotal">Subtotal</span>
+                    <span id="summarySubtotal">— EGP</span>
+                </div>
+                <div class="summary-line promo-discount-line" id="promoDiscountLine" style="display:none;">
+                    <span id="promoDiscountLabel">Discount</span>
+                    <span id="summaryDiscount" style="color:var(--success); font-weight:800;">— EGP</span>
+                </div>
+                <div class="summary-line summary-total-line">
+                    <span data-i18n="total">Total</span>
+                    <span id="summaryTotal" style="color:var(--gold2); font-weight:900; font-size:22px;">— EGP</span>
+                </div>
+            </div>
+        </aside>
+
+    </main>
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Store - Register</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header id="siteHeader"></header>
+    <main class="auth-page">
+        <section class="auth-card">
+            <span class="eyebrow">Join Us</span>
+            <h1>Perfume Store</h1>
+            
+            <h2 data-i18n="register">Create Account</h2>
+            
+            <form id="registerForm">
+                <div class="name-fields">
+                    <div>
+                        <label for="firstName" data-i18n="firstName">First Name</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                
+                    <div>
+                        <label for="lastName" data-i18n="lastName">Last Name</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                
+                </div>
+                <label for="registerEmail" data-i18n="email">Email</label><input type="email" id="registerEmail"
+                    required>
+                <label for="registerPassword" data-i18n="password">Password</label><input type="password"
+                    id="registerPassword" required>
+                <label for="confirmPassword" data-i18n="confirmPassword">Confirm Password</label><input type="password"
+                    id="confirmPassword" required>
+                    <div class="terms-agreement">
+
+                        <label>
+                            <input type="checkbox" id="agreeTerms" required>
+                    
+                            <span>
+                                <span data-i18n="agreeTerms">
+                                    I agree to the
+                                </span>
+                    
+                                <a href="terms.html" target="_blank" data-i18n="terms">
+                                    Terms & Conditions
+                                </a>
+                    
+                                <span data-i18n="and">and</span>
+                    
+                                <a href="privacy.html" target="_blank" data-i18n="privacy">
+                                    Privacy Policy
+                                </a>
+                            </span>
+                        </label>
+                    
+                    </div>
+                <button type="submit" data-i18n="register">Create Account</button>
+                <div class="social-divider">
+                    <span data-i18n="orContinueWith">Or continue with</span>
+                </div>
+                
+                <div class="social-login">
+                
+                    <button type="button" class="google-btn" id="googleLogin">
+                        <span>G</span>
+                        <span data-i18n="continueGoogle">
+                            Continue with Google
+                        </span>
+                    </button>
+                
+                </div>
+                <p><span data-i18n="alreadyAccount">Already have an account?</span> <a href="login.html"
+                        data-i18n="login">Login</a></p>
+            </form>
+        </section>
+    </main>
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+</body>
+
+</html>

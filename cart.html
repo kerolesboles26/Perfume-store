@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Perfume Store Egypt</title>
+    <meta name="description" content="View and manage items in your luxury fragrance shopping cart. Apply promo codes and proceed to checkout.">
+    <meta name="theme-color" content="#0d0e12">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header id="siteHeader"></header>
+    <main class="cart">
+        <section class="page-heading"><span class="eyebrow">Your Selection</span>
+            <h1 data-i18n="shoppingCart">Shopping Cart</h1>
+        </section>
+        <div class="cart-container"></div>
+        <div class="cart-total">
+            <h3><span data-i18n="total">Total</span>: <span id="cartTotal">0</span> EGP</h3><button id="clearCart"
+                class="secondary-btn" data-i18n="clearCart">Clear Cart</button><button id="checkout"
+                data-i18n="checkout">Checkout</button>
+        </div>
+    </main>
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+
+</body>
+
+</html>

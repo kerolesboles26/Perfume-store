@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header id="siteHeader"></header>
+    <main class="order-success">
+        <div class="success-container"><span class="success-icon">✓</span>
+            <h1 data-i18n="confirmed">Order Confirmed ✅</h1>
+            <p data-i18n="thankYou">Thank you for your order!</p>
+            <div id="orderDetails"></div><a class="primary-link" href="products.html"
+                data-i18n="continueShopping">Continue Shopping</a>
+        </div>
+    </main>
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+
+</body>
+
+</html>

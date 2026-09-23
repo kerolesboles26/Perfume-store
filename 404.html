@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Perfume Store</title>
+    <meta name="description" content="The page you're looking for cannot be found. Explore our luxury fragrance collection instead.">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .page-404 {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at center, #1a1208 0%, #0a0905 100%);
+        }
+        .page-404-number {
+            font-size: clamp(100px, 20vw, 200px);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #d4af37, #f5d97e, #a07c1e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer404 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes shimmer404 {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        .page-404-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: float404 3s ease-in-out infinite;
+        }
+        @keyframes float404 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .page-404 h2 {
+            font-size: clamp(22px, 4vw, 36px);
+            color: var(--cream, #f5f0e8);
+            margin-bottom: 16px;
+        }
+        .page-404 p {
+            color: var(--muted, #888);
+            font-size: 17px;
+            max-width: 480px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+        .page-404-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .page-404-decor {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .page-404-decor.top-left { top: -80px; left: -80px; }
+        .page-404-decor.bottom-right { bottom: -80px; right: -80px; }
+    </style>
+</head>
+<body>
+    <div class="page-404-decor top-left"></div>
+    <div class="page-404-decor bottom-right"></div>
+
+    <header id="siteHeader"></header>
+
+    <main class="page-404">
+        <div class="page-404-icon">🌸</div>
+        <div class="page-404-number">404</div>
+        <h2>Page Not Found</h2>
+        <p>This page seems to have vanished like a fleeting fragrance. Perhaps it was moved, renamed, or never existed. Let us guide you back to our luxury collection.</p>
+        <div class="page-404-actions">
+            <a href="index.html" class="primary-link">🏠 Back to Home</a>
+            <a href="products.html" class="secondary-btn primary-link" style="background:transparent;">🌹 Explore Fragrances</a>
+        </div>
+    </main>
+
+    <footer id="siteFooter"></footer>
+    <script src="./app.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+</body>
+</html>

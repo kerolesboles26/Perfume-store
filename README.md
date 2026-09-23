@@ -1,8 +1,12 @@
+
+
 # 🌹 Royal Perfume Store — Luxury E-Commerce Web Application
 
 > An ultra-luxurious, full-stack responsive fragrance boutique web application featuring interactive checkout, order management, multi-language (Arabic/English) support, Firebase authentication, and Progressive Web App (PWA) installation.
 
 ---
+
+
 
 ## 🌟 Key Features
 

@@ -4079,3 +4079,166 @@ html[dir="rtl"] .order-tracker-line::after {
     transform: translateY(-3px);
     box-shadow: 0 6px 16px rgba(201, 162, 39, 0.25);
 }
+
+/* ============= LIGHT MODE ============= */
+html[data-theme="light"] {
+    --bg: #f5f0e8;
+    --bg2: #ede7d9;
+    --card: #fff8ee;
+    --card2: #f9f2e3;
+    --gold: #b8860b;
+    --gold2: #9a6f00;
+    --cream: #1a1008;
+    --muted: #6b5e4a;
+    --border: rgba(139, 101, 8, 0.28);
+    --danger: #c0392b;
+    --success: #1e8449;
+    --shadow: 0 22px 60px rgba(0, 0, 0, .12);
+}
+
+html[data-theme="light"] body {
+    background: radial-gradient(circle at 80% 0, rgba(201, 162, 39, .12), transparent 30%),
+                radial-gradient(circle at 0 100%, rgba(201, 162, 39, .07), transparent 28%),
+                #f5f0e8;
+    color: #1a1008;
+}
+
+html[data-theme="light"] .site-nav {
+    background: rgba(245, 240, 232, 0.96);
+    border-bottom-color: rgba(139, 101, 8, 0.2);
+}
+
+html[data-theme="light"] .site-footer {
+    background: #ede7d9;
+    border-top-color: rgba(139, 101, 8, 0.2);
+}
+
+html[data-theme="light"] .order-card,
+html[data-theme="light"] .product-card,
+html[data-theme="light"] .testimonial-card {
+    background: #fff8ee;
+    border-color: rgba(139, 101, 8, 0.2);
+}
+
+html[data-theme="light"] .cart-item,
+html[data-theme="light"] .checkout-form,
+html[data-theme="light"] .profile-card {
+    background: #fff8ee;
+}
+
+html[data-theme="light"] .hero-luxury {
+    background: linear-gradient(135deg, rgba(201,162,39,.08) 0%, transparent 60%);
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle-btn {
+    min-width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--gold);
+    color: #111;
+    border-color: var(--gold);
+    transform: rotate(20deg);
+}
+
+.theme-toggle-btn .icon-dark,
+.theme-toggle-btn .icon-light {
+    position: absolute;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html[data-theme="light"] .theme-toggle-btn .icon-dark {
+    opacity: 0;
+    transform: rotate(90deg) scale(0);
+}
+
+html[data-theme="light"] .theme-toggle-btn .icon-light {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+html:not([data-theme="light"]) .theme-toggle-btn .icon-dark {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+html:not([data-theme="light"]) .theme-toggle-btn .icon-light {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0);
+}
+
+/* Smooth theme transition */
+html {
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
+}
+
+/* Order card removal animation */
+.order-card.removing {
+    animation: cardFadeOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes cardFadeOut {
+    0% { opacity: 1; transform: scale(1) translateY(0); max-height: 500px; }
+    60% { opacity: 0; transform: scale(0.92) translateY(10px); }
+    100% { opacity: 0; transform: scale(0.88) translateY(20px); max-height: 0; padding: 0; margin: 0; }
+}
+
+/* Order card entrance animation */
+.order-card {
+    animation: cardSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes cardSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* WhatsApp Order Confirmation Button */
+.whatsapp-confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 24px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-decoration: none;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.whatsapp-confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55);
+    color: #ffffff !important;
+}
+
+.whatsapp-confirm-btn svg {
+    flex-shrink: 0;
+}

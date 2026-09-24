@@ -1,5 +1,15 @@
 // ================= PERFUME STORE =================
 
+// Apply saved theme ASAP to prevent flash
+(function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+    }
+})();
+
 const perfumes = [
     { id: 1, name: "Dior Sauvage", price: 3500, image: "perfume1.jpg", description: "A fresh and powerful fragrance with a modern masculine character. Opens with a radiant burst of Calabrian bergamot and pepper, then dries down to ambroxan and warm woods.", family: "fresh", gender: "men", notes: "Bergamot, Pepper, Ambroxan, Cedarwood", sillage: "beast", rating: 4.8, reviewCount: 142 },
     { id: 2, name: "Bleu de Chanel", price: 4200, image: "perfume2.jpg", description: "An elegant fragrance with fresh citrus and woody notes. A bold, clean and sensual scent expressing freedom with a woody aromatic signature.", family: "woody", gender: "men", notes: "Citrus, Ginger, Incense, Vetiver, Sandalwood", sillage: "strong", rating: 4.7, reviewCount: 118 },
@@ -702,6 +712,10 @@ function renderLayout() {
                         ${savedUser && loggedIn ? `<span class="user-name">${t("welcome")}${savedUser.name}</span>` : ""}
                         <button class="language-btn ${currentLanguage === "en" ? "active" : ""}" data-lang="en">EN</button>
                         <button class="language-btn ${currentLanguage === "ar" ? "active" : ""}" data-lang="ar">ع</button>
+                        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark/light mode" title="Toggle Theme">
+                            <span class="icon-dark">🌙</span>
+                            <span class="icon-light">☀️</span>
+                        </button>
                         ${loggedIn ? `<button id="logoutButton" class="outline-btn">${t("logout")}</button>` : `<a class="outline-btn" href="login.html">${t("login")}</a>`}
                         <button class="hamburger-btn" id="drawerToggle" aria-label="Menu">☰</button>
                     </div>
@@ -774,6 +788,22 @@ function renderLayout() {
         header.querySelectorAll("[data-lang]").forEach(btn => {
             btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
         });
+
+        // Dark/Light mode toggle
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener("click", () => {
+                const currentTheme = document.documentElement.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+                if (newTheme === "dark") {
+                    document.documentElement.removeAttribute("data-theme");
+                    localStorage.setItem("theme", "dark");
+                } else {
+                    document.documentElement.setAttribute("data-theme", "light");
+                    localStorage.setItem("theme", "light");
+                }
+            });
+        }
 
         const drawerToggle = document.getElementById("drawerToggle");
         const drawerClose = document.getElementById("drawerClose");
@@ -2417,6 +2447,39 @@ window.clearAllOrders = async function() {
     if (typeof displayOrderDetails === "function") displayOrderDetails();
 };
 
+// ================= WHATSAPP ORDER NOTIFICATION =================
+
+const STORE_WHATSAPP_PHONE = "201208077173";
+
+window.sendOrderToWhatsApp = function(orderId) {
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    const lastOrder = JSON.parse(localStorage.getItem("lastOrder"));
+    const order = (orders.find(o => String(o.id) === String(orderId))) || lastOrder;
+    if (!order) return;
+
+    const items = (order.products || []).map(p => `• ${p.name} × ${p.quantity || 1} (${((p.quantity || 1) * Number(p.price)).toLocaleString()} EGP)`).join("\n");
+    const paymentText = order.customer && order.customer.payment === "cash" ? "الدفع عند الاستلام (Cash)" : "بطاقة بنكية (Card)";
+
+    const msg = `🌹 *طلب جديد من متجر العطور* 🌹\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `📦 *رقم الطلب:* #${order.id}\n` +
+        `👤 *العميل:* ${order.customer ? order.customer.fullName : "غير محدد"}\n` +
+        `📞 *الهاتف:* ${order.customer ? order.customer.phone : "غير محدد"}\n` +
+        `📍 *العنوان:* ${order.customer ? order.customer.address : "غير محدد"}\n` +
+        `💳 *طريقة الدفع:* ${paymentText}\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `🛍️ *المنتجات المطلوبة:*\n${items}\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        (order.discount ? `🎟️ *الخصم:* -${Number(order.discount).toLocaleString()} EGP (${order.promoCode || ""})\n` : "") +
+        `💰 *الإجمالي النهائي:* ${Number(order.total).toLocaleString()} EGP\n` +
+        `📅 *تاريخ الطلب:* ${order.date}\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `✨ مرحباً، أرغب في تأكيد طلبي وشحنه. شكراً!`;
+
+    const url = `https://wa.me/${STORE_WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
+};
+
 // ================= ORDER SUCCESS =================
 
 const orderDetails = document.getElementById("orderDetails");
@@ -2471,6 +2534,12 @@ function displayOrderDetails() {
 
         <h2>${t("total")}: ${Number(order.total).toLocaleString()} EGP</h2>
         <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">${t("date")}: ${order.date}</p>
+
+        <!-- WhatsApp Order Button -->
+        <button onclick="sendOrderToWhatsApp('${orderIdStr}')" class="whatsapp-confirm-btn" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span>${currentLanguage === "ar" ? "إرسال وتأكيد الطلب عبر واتساب 💬" : "Send & Confirm via WhatsApp 💬"}</span>
+        </button>
 
         <!-- Action Row -->
         <div class="order-action-buttons">
@@ -2584,6 +2653,7 @@ async function displayOrders(skipFirebase = false) {
                 </p>
 
                 <div class="order-action-buttons">
+                    <button onclick="sendOrderToWhatsApp('${orderIdStr}')" class="invoice-action-btn" style="background:rgba(37,211,102,0.15); border-color:#25D366; color:#25D366;">💬 ${currentLanguage === "ar" ? "واتساب" : "WhatsApp"}</button>
                     <button onclick="printOrderInvoice('${orderIdStr}')" class="invoice-action-btn">🖨️ ${t("printInvoice")}</button>
                     ${isPending ? `
                         <button onclick="cancelOrder('${orderIdStr}')" class="cancel-action-btn">✕ ${t("cancelOrder")}</button>

@@ -4,7 +4,8 @@ import {
     getDocs, 
     doc, 
     setDoc, 
-    deleteDoc 
+    deleteDoc,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 // ================= ADMIN I18N DICTIONARY =================
@@ -188,74 +189,82 @@ async function loadAdminOrders() {
         ordersBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#888;">⏳ Loading orders...</td></tr>`;
     }
 
-    let orders = [];
-
     try {
         const db = getFirestore();
         const ordersCol = collection(db, "orders");
-        const ordersSnap = await getDocs(ordersCol);
+        
+        // Use onSnapshot for REAL-TIME blazing fast updates
+        onSnapshot(ordersCol, (ordersSnap) => {
+            let orders = [];
+            ordersSnap.forEach(docSnap => {
+                orders.push({ firebaseId: docSnap.id, ...docSnap.data() });
+            });
 
-        ordersSnap.forEach(docSnap => {
-            orders.push({ firebaseId: docSnap.id, ...docSnap.data() });
+            // Merge with LocalStorage orders to avoid duplicates and ensure local tests show up
+            const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
+            localOrders.forEach(loc => {
+                const exists = orders.some(o => String(o.id) === String(loc.id));
+                if (!exists) {
+                    orders.push(loc);
+                } else {
+                    // Sync status if local has newer status (e.g. cancelled)
+                    const idx = orders.findIndex(o => String(o.id) === String(loc.id));
+                    if (idx !== -1 && loc.status === "cancelled") {
+                        orders[idx].status = "cancelled";
+                    }
+                }
+            });
+
+            // Remove strict exact duplicates if multiple submitted with identical ID
+            const uniqueMap = new Map();
+            orders.forEach(o => {
+                const key = String(o.id || o.firebaseId);
+                if (!uniqueMap.has(key)) {
+                    uniqueMap.set(key, o);
+                } else {
+                    // Keep the one with status if available
+                    const existing = uniqueMap.get(key);
+                    if (o.status === "cancelled") {
+                        uniqueMap.set(key, o);
+                    }
+                }
+            });
+            orders = Array.from(uniqueMap.values());
+
+            // Sort by date descending
+            orders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+            globalOrders = orders;
+
+            // Calculate Metrics
+            let totalSales = 0;
+            let uniqueCustomers = new Set();
+
+            orders.forEach(o => {
+                if (o.status !== "cancelled") {
+                    totalSales += Number(o.total || 0);
+                }
+                if (o.userEmail) uniqueCustomers.add(o.userEmail);
+                else if (o.customer && o.customer.fullName) uniqueCustomers.add(o.customer.fullName);
+                else if (o.customer && o.customer.phone) uniqueCustomers.add(o.customer.phone);
+            });
+
+            if (metricSales) metricSales.textContent = `${totalSales.toLocaleString()} EGP`;
+            if (metricOrders) metricOrders.textContent = orders.length;
+            if (metricCustomers) metricCustomers.textContent = uniqueCustomers.size;
+
+            renderFilteredOrders();
+        }, (error) => {
+            console.error("Error listening to orders:", error);
+            if (ordersBody) {
+                ordersBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#ff4d4d;">⚠️ Error loading orders. Check console.</td></tr>`;
+            }
         });
+
     } catch (e) {
-        console.warn("Could not fetch from Firebase Firestore, falling back to localStorage", e);
+        console.warn("Could not set up Firebase listener, falling back to localStorage", e);
+        // Fallback code here if needed
     }
-
-    // Merge with LocalStorage orders to avoid duplicates and ensure local tests show up
-    const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
-    localOrders.forEach(loc => {
-        const exists = orders.some(o => String(o.id) === String(loc.id));
-        if (!exists) {
-            orders.push(loc);
-        } else {
-            // Sync status if local has newer status (e.g. cancelled)
-            const idx = orders.findIndex(o => String(o.id) === String(loc.id));
-            if (idx !== -1 && loc.status === "cancelled") {
-                orders[idx].status = "cancelled";
-            }
-        }
-    });
-
-    // Remove strict exact duplicates if multiple submitted with identical ID
-    const uniqueMap = new Map();
-    orders.forEach(o => {
-        const key = String(o.id || o.firebaseId);
-        if (!uniqueMap.has(key)) {
-            uniqueMap.set(key, o);
-        } else {
-            // Keep the one with status if available
-            const existing = uniqueMap.get(key);
-            if (o.status === "cancelled") {
-                uniqueMap.set(key, o);
-            }
-        }
-    });
-    orders = Array.from(uniqueMap.values());
-
-    // Sort by date descending
-    orders.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-
-    globalOrders = orders;
-
-    // Calculate Metrics
-    let totalSales = 0;
-    let uniqueCustomers = new Set();
-
-    orders.forEach(o => {
-        if (o.status !== "cancelled") {
-            totalSales += Number(o.total || 0);
-        }
-        if (o.userEmail) uniqueCustomers.add(o.userEmail);
-        else if (o.customer && o.customer.fullName) uniqueCustomers.add(o.customer.fullName);
-        else if (o.customer && o.customer.phone) uniqueCustomers.add(o.customer.phone);
-    });
-
-    if (metricSales) metricSales.textContent = `${totalSales.toLocaleString()} EGP`;
-    if (metricOrders) metricOrders.textContent = orders.length;
-    if (metricCustomers) metricCustomers.textContent = uniqueCustomers.size;
-
-    renderFilteredOrders();
 }
 
 function renderFilteredOrders() {

@@ -324,26 +324,26 @@ function renderFilteredOrders() {
                         ${statusText}
                     </span>
                     <select class="status-select" data-id="${orderIdStr}" data-firebase="${o.firebaseId || ''}" data-user="${o.userId || ''}" style='width:100%;'>
-                        <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>⏳ Pending</option>
-                        <option value="packaging" ${currentStatus === 'packaging' ? 'selected' : ''}>🎁 Packaging</option>
-                        <option value="in_transit" ${currentStatus === 'in_transit' ? 'selected' : ''}>🚚 In Transit</option>
-                        <option value="delivered" ${currentStatus === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
-                        <option value="cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>✕ Cancelled</option>
+                        <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>⏳ ${at("statusPending")}</option>
+                        <option value="packaging" ${currentStatus === 'packaging' ? 'selected' : ''}>🎁 ${at("statusPackaging")}</option>
+                        <option value="in_transit" ${currentStatus === 'in_transit' ? 'selected' : ''}>🚚 ${at("statusInTransit")}</option>
+                        <option value="delivered" ${currentStatus === 'delivered' ? 'selected' : ''}>✅ ${at("statusDelivered")}</option>
+                        <option value="cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>✕ ${at("statusCancelled")}</option>
                     </select>
                 </td>
                 <td style='min-width:200px;'>
                     <div class="action-buttons-cell">
                         <button class="admin-btn update-btn" onclick="updateOrderStatus('${orderIdStr}')">
-                            ✓ Update
+                            ✓ ${at("update")}
                         </button>
                         <button class="admin-btn details-btn" onclick="openOrderModal('${orderIdStr}')">
-                            👁️ Details
+                            👁️ ${at("details")}
                         </button>
                         <a class="admin-btn whatsapp-action-btn" href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener noreferrer">
-                            💬 WhatsApp
+                            💬 ${at("whatsapp")}
                         </a>
                         <button class="admin-btn delete-action-btn" onclick="adminDeleteOrder('${orderIdStr}')">
-                            🗑️ Delete
+                            🗑️ ${at("delete")}
                         </button>
                     </div>
                 </td>

@@ -293,8 +293,12 @@ function renderFilteredOrders() {
         const orderIdStr = String(o.id || o.firebaseId);
         const currentStatus = o.status || "pending";
         const isCancelled = currentStatus === "cancelled";
-        const customerPhone = o.customer?.phone || "";
-        const cleanPhone = customerPhone.replace(/\D/g, "");
+        const customerPhone = o.customer?.phone || o.customer?.fullName || "";
+        const rawPhone = (o.customer?.phone || "").replace(/\D/g, "");
+        // Build WhatsApp number: Egyptian numbers start with 0 → add 2
+        const waPhone = rawPhone ? (rawPhone.startsWith('0') ? '2' + rawPhone : rawPhone) : "201208077173";
+        const waName = o.customer?.fullName || "";
+        const waMsg = encodeURIComponent(`🌹 متجر العطور\n👤 العميل: ${waName}\n📦 رقم الطلب: #${orderIdStr}\n📞 الهاتف: ${o.customer?.phone || 'غير محدد'}\n💰 الإجمالي: ${Number(o.total||0).toLocaleString()} EGP\n✨ التحديث الجديد على طلبك...`);
 
         let statusText = currentStatus;
         if (currentStatus === "pending") statusText = at("statusPending");
@@ -305,42 +309,41 @@ function renderFilteredOrders() {
 
         return `
             <tr id="admin-row-${orderIdStr}">
-                <td style="font-weight:700; color:var(--gold2);">#${orderIdStr.slice(-6)}</td>
+                <td style="font-weight:700; color:var(--gold2, #c9a227);"><span style='display:block; font-size:13px;'>#${orderIdStr.slice(-8)}</span></td>
                 <td>
-                    <div style="font-weight:700; color:#fff;">${o.customer?.fullName || 'Guest'}</div>
-                    <div style="font-size:12px; color:#888;">${o.customer?.phone || o.userEmail || ''}</div>
+                    <div style="font-weight:700; color:#fff; margin-bottom:3px;">${o.customer?.fullName || 'Guest'}</div>
+                    <div style="font-size:11px; color:#25D366; font-weight:600;">📞 ${o.customer?.phone || '—'}</div>
+                    <div style="font-size:11px; color:#888;">${o.userEmail || ''}</div>
                 </td>
-                <td style="font-size:12px; color:#aaa;">${o.date || 'N/A'}</td>
-                <td style="color:var(--gold2); font-weight:800; font-size:15px;">
+                <td style="font-size:12px; color:#aaa; min-width:120px;">${o.date || 'N/A'}</td>
+                <td style="color:var(--gold2, #c9a227); font-weight:800; font-size:15px; white-space:nowrap;">
                     ${Number(o.total || 0).toLocaleString()} EGP
                 </td>
-                <td>
-                    <span class="status-badge status-${currentStatus}">
+                <td style='min-width:160px;'>
+                    <span class="status-badge status-${currentStatus}" style='display:inline-block; margin-bottom:6px;'>
                         ${statusText}
                     </span>
-                    <select class="status-select ${isCancelled ? 'status-cancelled' : ''}" data-id="${orderIdStr}" data-firebase="${o.firebaseId || ''}" data-user="${o.userId || ''}">
-                        <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>${at("statusPending")}</option>
-                        <option value="packaging" ${currentStatus === 'packaging' ? 'selected' : ''}>${at("statusPackaging")}</option>
-                        <option value="in_transit" ${currentStatus === 'in_transit' ? 'selected' : ''}>${at("statusInTransit")}</option>
-                        <option value="delivered" ${currentStatus === 'delivered' ? 'selected' : ''}>${at("statusDelivered")}</option>
-                        <option value="cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>${at("statusCancelled")}</option>
+                    <select class="status-select" data-id="${orderIdStr}" data-firebase="${o.firebaseId || ''}" data-user="${o.userId || ''}" style='width:100%;'>
+                        <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>⏳ Pending</option>
+                        <option value="packaging" ${currentStatus === 'packaging' ? 'selected' : ''}>🎁 Packaging</option>
+                        <option value="in_transit" ${currentStatus === 'in_transit' ? 'selected' : ''}>🚚 In Transit</option>
+                        <option value="delivered" ${currentStatus === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
+                        <option value="cancelled" ${currentStatus === 'cancelled' ? 'selected' : ''}>✕ Cancelled</option>
                     </select>
                 </td>
-                <td>
+                <td style='min-width:200px;'>
                     <div class="action-buttons-cell">
-                        <button class="admin-btn update-btn" onclick="updateOrderStatus('${orderIdStr}')" title="${at("update")}">
-                            ✓ ${at("update")}
+                        <button class="admin-btn update-btn" onclick="updateOrderStatus('${orderIdStr}')">
+                            ✓ Update
                         </button>
-                        <button class="admin-btn details-btn" onclick="openOrderModal('${orderIdStr}')" title="${at("details")}">
-                            👁️ ${at("details")}
+                        <button class="admin-btn details-btn" onclick="openOrderModal('${orderIdStr}')">
+                            👁️ Details
                         </button>
-                        ${cleanPhone ? `
-                            <a class="admin-btn whatsapp-action-btn" href="https://wa.me/${cleanPhone.startsWith('0') ? '2' + cleanPhone : cleanPhone}?text=${encodeURIComponent(`مرحباً ${o.customer?.fullName || ''}، بخصوص طلبك رقم #${orderIdStr} من متجر Perfume Store...`)}" target="_blank" rel="noopener noreferrer" title="${at("whatsapp")}">
-                                💬 ${at("whatsapp")}
-                            </a>
-                        ` : ''}
-                        <button class="admin-btn delete-action-btn" onclick="adminDeleteOrder('${orderIdStr}')" title="${at("delete")}">
-                            🗑️
+                        <a class="admin-btn whatsapp-action-btn" href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" rel="noopener noreferrer">
+                            💬 WhatsApp
+                        </a>
+                        <button class="admin-btn delete-action-btn" onclick="adminDeleteOrder('${orderIdStr}')">
+                            🗑️ Delete
                         </button>
                     </div>
                 </td>

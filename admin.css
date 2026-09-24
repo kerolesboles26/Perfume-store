@@ -250,9 +250,8 @@ body {
 /* Toolbar */
 .admin-toolbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 24px;
     flex-wrap: wrap;
 }
@@ -260,13 +259,13 @@ body {
 .admin-search-box {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: #11131a;
-    border: 1px solid rgba(201, 162, 39, 0.18);
+    border: 1px solid rgba(201, 162, 39, 0.2);
     border-radius: 10px;
-    padding: 10px 16px;
+    padding: 9px 14px;
     flex: 1;
-    min-width: 260px;
+    min-width: 200px;
 }
 
 .admin-search-box input {
@@ -280,32 +279,34 @@ body {
 }
 
 .admin-search-box input::placeholder {
-    color: #666;
+    color: #555;
 }
 
 .admin-filter-box {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .admin-filter-box select {
     background: #11131a;
     color: #e6e6e6;
-    border: 1px solid rgba(201, 162, 39, 0.18);
-    padding: 10px 16px;
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    padding: 9px 14px;
     border-radius: 10px;
     font-size: 13px;
     font-family: inherit;
     cursor: pointer;
     outline: none;
+    height: 40px;
 }
 
 .refresh-btn {
     background: rgba(201, 162, 39, 0.1);
     color: var(--gold2, #c9a227);
     border: 1px solid rgba(201, 162, 39, 0.25);
-    padding: 10px 16px;
+    padding: 9px 14px;
     border-radius: 10px;
     font-size: 13px;
     font-weight: 700;
@@ -314,6 +315,8 @@ body {
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
+    height: 40px;
+    white-space: nowrap;
 }
 
 .refresh-btn:hover {
@@ -419,22 +422,25 @@ body {
 .action-buttons-cell {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     flex-wrap: wrap;
+    min-width: 200px;
 }
 
 .admin-btn {
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     border: none;
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
     text-decoration: none;
+    white-space: nowrap;
+    line-height: 1.4;
 }
 
 .update-btn {
@@ -450,7 +456,7 @@ body {
 .details-btn {
     background: rgba(255, 255, 255, 0.08);
     color: #ccc;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .details-btn:hover {
@@ -460,19 +466,19 @@ body {
 
 .whatsapp-action-btn {
     background: rgba(37, 211, 102, 0.15);
-    color: #25D366;
-    border: 1px solid rgba(37, 211, 102, 0.35);
+    color: #25D366 !important;
+    border: 1px solid rgba(37, 211, 102, 0.35) !important;
 }
 
 .whatsapp-action-btn:hover {
     background: #25D366;
-    color: #fff;
+    color: #fff !important;
 }
 
 .delete-action-btn {
     background: rgba(220, 53, 69, 0.12);
     color: #ff6b6b;
-    border: 1px solid rgba(220, 53, 69, 0.3);
+    border: 1px solid rgba(220, 53, 69, 0.3) !important;
 }
 
 .delete-action-btn:hover {

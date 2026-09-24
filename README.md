@@ -1,6 +1,17 @@
 
 
 # 🌹 Royal Perfume Store — Luxury E-Commerce Web Application
+<div align="center">
+
+[![Watch Demo Video](https://img.shields.io/badge/▶%20Watch%20Demo%20Video-Play%20%2F%20Download-c9a227?style=for-the-badge&logoColor=white)](https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4)
+[![Release Version](https://img.shields.io/badge/Release-v1.0.0-blue?style=for-the-badge)](https://github.com/kerolesboles26/Perfume-store/releases/tag/v1.0.0)
+
+### 🎬 [اضغط هنا لمشاهدة فيديو استعراض المشروع الكامل | Full Project Demo](https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4)
+
+https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4
+
+</div>
+
 
 > An ultra-luxurious, full-stack responsive fragrance boutique web application featuring interactive checkout, order management, multi-language (Arabic/English) support, Firebase authentication, and Progressive Web App (PWA) installation.
 

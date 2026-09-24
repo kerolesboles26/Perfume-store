@@ -17,7 +17,12 @@ import {
     getDoc,
     setDoc,
     collection,
-    addDoc
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -173,38 +178,60 @@ window.getUserOrders = async function () {
 
 window.updateUserOrderStatus = async function (orderId, newStatus) {
     await window.firebaseReady;
-    if (currentFirebaseUser) {
-        try {
+    const strId = String(orderId);
+    try {
+        if (currentFirebaseUser) {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().orders) {
                 const updatedOrders = userSnap.data().orders.map(o => {
-                    if (String(o.id) === String(orderId)) {
+                    if (String(o.id) === strId) {
                         return { ...o, status: newStatus };
                     }
                     return o;
                 });
                 await setDoc(userRef, { orders: updatedOrders }, { merge: true });
             }
-        } catch (error) {
-            console.error("Firestore Update Order Status Error:", error);
         }
+
+        // Sync with global "orders" collection for admin dashboard
+        const ordersCol = collection(db, "orders");
+        const allOrdersSnap = await getDocs(ordersCol);
+        allOrdersSnap.forEach(async (orderDoc) => {
+            const d = orderDoc.data();
+            if (String(d.id) === strId) {
+                await updateDoc(doc(db, "orders", orderDoc.id), { status: newStatus });
+            }
+        });
+    } catch (error) {
+        console.error("Firestore Update Order Status Error:", error);
     }
 };
 
 window.deleteUserOrderFirebase = async function (orderId) {
     await window.firebaseReady;
-    if (currentFirebaseUser) {
-        try {
+    const strId = String(orderId);
+    try {
+        if (currentFirebaseUser) {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().orders) {
-                const updatedOrders = userSnap.data().orders.filter(o => String(o.id) !== String(orderId));
+                const updatedOrders = userSnap.data().orders.filter(o => String(o.id) !== strId);
                 await setDoc(userRef, { orders: updatedOrders }, { merge: true });
             }
-        } catch (error) {
-            console.error("Firestore Delete Order Error:", error);
         }
+
+        // Delete from global "orders" collection for admin dashboard
+        const ordersCol = collection(db, "orders");
+        const allOrdersSnap = await getDocs(ordersCol);
+        allOrdersSnap.forEach(async (orderDoc) => {
+            const d = orderDoc.data();
+            if (String(d.id) === strId) {
+                await deleteDoc(doc(db, "orders", orderDoc.id));
+            }
+        });
+    } catch (error) {
+        console.error("Firestore Delete Order Error:", error);
     }
 };
 

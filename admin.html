@@ -3,66 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfume Store - Admin Dashboard</title>
+    <title>Royal Admin Dashboard | Perfume Store 🌹</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./admin.css">
 </head>
 <body>
-    <div class="admin-layout">
+    <div class="admin-layout" id="adminLayout">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="admin-brand">
-                <h2>Royal Admin</h2>
+                <h2>👑 Royal Admin</h2>
+                <span class="admin-subtitle" data-i18n="controlPanel">Control Panel</span>
             </div>
             <nav class="admin-nav">
-                <a href="#" class="active" data-view="dashboard">Dashboard</a>
+                <a href="#" class="active" data-view="dashboard">
+                    <span>📊</span> <span data-i18n="dashboard">Dashboard</span>
+                </a>
             </nav>
             <div class="admin-logout">
-                <a href="index.html">← Back to Store</a>
+                <a href="index.html">
+                    <span>←</span> <span data-i18n="backToStore">Back to Store</span>
+                </a>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="admin-main">
             <header class="admin-header">
-                <h1>Overview</h1>
-                <div class="admin-user">Admin Panel</div>
+                <div>
+                    <h1 data-i18n="overview">Overview</h1>
+                    <p class="admin-date-badge" id="adminLiveDate"></p>
+                </div>
+                <div class="admin-header-actions">
+                    <button id="adminLangToggle" class="admin-lang-btn" type="button">
+                        <span>🌐</span> <span id="adminLangLabel">العربية</span>
+                    </button>
+                    <div class="admin-user-pill">
+                        <span>🛡️</span> <span data-i18n="adminPanel">Admin Panel</span>
+                    </div>
+                </div>
             </header>
 
             <div class="admin-content" id="adminContent">
                 <!-- Dashboard View -->
                 <div class="admin-view active" id="view-dashboard">
+                    <!-- Metrics Cards -->
                     <div class="metrics-grid">
                         <div class="metric-card">
-                            <h3>Total Sales</h3>
+                            <div class="metric-header">
+                                <h3 data-i18n="totalSales">Total Sales</h3>
+                                <span class="metric-icon">💰</span>
+                            </div>
                             <div class="metric-value" id="metricSales">0 EGP</div>
                         </div>
                         <div class="metric-card">
-                            <h3>Total Orders</h3>
+                            <div class="metric-header">
+                                <h3 data-i18n="totalOrders">Total Orders</h3>
+                                <span class="metric-icon">📦</span>
+                            </div>
                             <div class="metric-value" id="metricOrders">0</div>
                         </div>
                         <div class="metric-card">
-                            <h3>Customers</h3>
+                            <div class="metric-header">
+                                <h3 data-i18n="customers">Customers</h3>
+                                <span class="metric-icon">👥</span>
+                            </div>
                             <div class="metric-value" id="metricCustomers">0</div>
                         </div>
                     </div>
 
+                    <!-- Filter & Search Toolbar -->
+                    <div class="admin-toolbar">
+                        <div class="admin-search-box">
+                            <span>🔍</span>
+                            <input type="text" id="adminSearchInput" placeholder="Search by customer, phone, or order ID..." data-i18n-placeholder="searchPlaceholder">
+                        </div>
+                        <div class="admin-filter-box">
+                            <select id="adminStatusFilter">
+                                <option value="all" data-i18n="filterAll">All Statuses (الكل)</option>
+                                <option value="pending" data-i18n="statusPending">Pending (قيد المراجعة)</option>
+                                <option value="packaging" data-i18n="statusPackaging">Packaging (جاري التجهيز)</option>
+                                <option value="in_transit" data-i18n="statusInTransit">In Transit (في الطريق)</option>
+                                <option value="delivered" data-i18n="statusDelivered">Delivered (تم التوصيل)</option>
+                                <option value="cancelled" data-i18n="statusCancelled">Cancelled (ملغي)</option>
+                            </select>
+                            <button id="adminRefreshBtn" class="refresh-btn" type="button" title="Refresh">
+                                🔄 <span data-i18n="refresh">Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table Section -->
                     <div class="recent-orders-section">
-                        <h2>Recent Orders</h2>
+                        <div class="section-title-row">
+                            <h2 data-i18n="recentOrders">Recent Orders</h2>
+                            <span class="orders-count-tag" id="ordersCountTag">0 orders</span>
+                        </div>
                         <div class="admin-table-wrapper">
                             <table class="admin-table">
                                 <thead>
                                     <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th data-i18n="orderId">Order ID</th>
+                                        <th data-i18n="customer">Customer</th>
+                                        <th data-i18n="date">Date</th>
+                                        <th data-i18n="total">Total</th>
+                                        <th data-i18n="status">Status</th>
+                                        <th data-i18n="actions">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="adminOrdersTableBody">
-                                    <!-- Orders will be injected here -->
+                                    <tr><td colspan="6" style="text-align:center; padding:40px;">Loading orders...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -70,6 +120,19 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderDetailsModal" class="admin-modal" style="display:none;">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="modalOrderTitle">Order Details</h3>
+                <button class="admin-modal-close" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="modalOrderBody">
+                <!-- Injected via JS -->
+            </div>
+        </div>
     </div>
 
     <script type="module" src="./firebase-auth.js"></script>

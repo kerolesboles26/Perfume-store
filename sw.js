@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perfume-store-v2';
+const CACHE_NAME = 'perfume-store-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -8,10 +8,27 @@ const ASSETS_TO_CACHE = [
   '/checkout.html',
   '/about.html',
   '/contact.html',
+  '/order-history.html',
+  '/order-success.html',
+  '/wishlist.html',
+  '/profile.html',
   '/404.html',
   '/style.css',
   '/app.js',
-  '/manifest.json'
+  '/firebase-auth.js',
+  '/manifest.json',
+  '/images/perfume1.jpg',
+  '/images/perfume2.jpg',
+  '/images/perfume3.jpg',
+  '/images/perfume4.jpg',
+  '/images/perfume5.jpg',
+  '/images/perfume6.jpg',
+  '/images/perfume7.jpg',
+  '/images/perfume8.jpg',
+  '/images/perfume9.jpg',
+  '/images/perfume10.jpg',
+  '/images/perfume11.jpg',
+  '/images/perfume12.jpg'
 ];
 
 self.addEventListener('install', (event) => {

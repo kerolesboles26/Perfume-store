@@ -22,7 +22,8 @@ import {
     deleteDoc,
     query,
     where,
-    getDocs
+    getDocs,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -44,6 +45,39 @@ let currentFirebaseUser = null;
 onAuthStateChanged(auth, (user) => {
     currentFirebaseUser = user;
     window.firebaseCurrentUser = user;
+
+    if (user) {
+        // Real-time synchronization of customer orders with Firestore
+        try {
+            const userRef = doc(db, "users", user.uid);
+            onSnapshot(userRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.orders) {
+                        localStorage.setItem("orders", JSON.stringify(data.orders));
+                        
+                        // Update lastOrder if matching
+                        const lastOrder = JSON.parse(localStorage.getItem("lastOrder"));
+                        if (lastOrder) {
+                            const updatedLast = data.orders.find(o => String(o.id) === String(lastOrder.id));
+                            if (updatedLast) {
+                                localStorage.setItem("lastOrder", JSON.stringify(updatedLast));
+                            }
+                        }
+
+                        if (typeof window.displayOrders === "function") {
+                            window.displayOrders(true);
+                        }
+                        if (typeof window.displayOrderDetails === "function") {
+                            window.displayOrderDetails();
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            console.warn("User orders snapshot listener error:", e);
+        }
+    }
 });
 
 window.firebaseReady = new Promise((resolve) => {
@@ -133,24 +167,24 @@ window.saveUserOrder = async function (orderData) {
     localStorage.setItem("lastOrder", JSON.stringify(orderData));
 
     // Save to Firestore
-    if (currentFirebaseUser) {
-        try {
+    try {
+        if (currentFirebaseUser) {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             const userSnap = await getDoc(userRef);
             const userOrders = (userSnap.exists() && userSnap.data().orders) ? userSnap.data().orders : [];
             userOrders.push(orderData);
             await setDoc(userRef, { orders: userOrders }, { merge: true });
-
-            // Global orders collection for store administration
-            const ordersCol = collection(db, "orders");
-            await addDoc(ordersCol, {
-                ...orderData,
-                userId: currentFirebaseUser.uid,
-                userEmail: currentFirebaseUser.email || ""
-            });
-        } catch (error) {
-            console.error("Firestore Order Save Error:", error);
         }
+
+        // Global orders collection for store administration (BOTH guest and logged-in)
+        const ordersCol = collection(db, "orders");
+        await addDoc(ordersCol, {
+            ...orderData,
+            userId: currentFirebaseUser ? currentFirebaseUser.uid : null,
+            userEmail: currentFirebaseUser ? (currentFirebaseUser.email || "") : (orderData.customer?.email || "")
+        });
+    } catch (error) {
+        console.error("Firestore Order Save Error:", error);
     }
 };
 

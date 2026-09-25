@@ -2,6 +2,7 @@ import {
     getFirestore, 
     collection, 
     getDocs, 
+    getDoc,
     doc, 
     setDoc, 
     deleteDoc,
@@ -388,9 +389,17 @@ window.updateOrderStatus = async function(orderId) {
         }
 
         // 2. Update user document if userId present
-        if (userId) {
-            const userRef = doc(db, "users", userId);
-            const userSnap = await (await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js")).getDoc(userRef);
+        let targetUserId = userId;
+        if (!targetUserId) {
+            const foundOrder = globalOrders.find(o => String(o.id || o.firebaseId) === String(orderId));
+            if (foundOrder && foundOrder.userId) {
+                targetUserId = foundOrder.userId;
+            }
+        }
+
+        if (targetUserId) {
+            const userRef = doc(db, "users", targetUserId);
+            const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().orders) {
                 const uOrders = userSnap.data().orders.map(o => {
                     if (String(o.id) === String(orderId)) {

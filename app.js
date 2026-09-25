@@ -2552,6 +2552,7 @@ function displayOrderDetails() {
     `;
 }
 
+window.displayOrderDetails = displayOrderDetails;
 displayOrderDetails();
 
 // ================= ORDER HISTORY =================
@@ -2668,6 +2669,8 @@ async function displayOrders(skipFirebase = false) {
 
     ordersContainer.innerHTML = headerControls + ordersCardsHtml;
 }
+
+window.displayOrders = displayOrders;
 
 if (ordersContainer) {
     displayOrders();

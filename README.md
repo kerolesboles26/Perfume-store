@@ -133,4 +133,4 @@ Then navigate to `http://localhost:5000` in your browser.
 ---
 
 ## 📄 License
-This project is licensed under the [MIT License](LICENSE) — free to use and adapt for academic, personal, and commercial purposes.
+This project is licensed under the [MIT License](LICENSE) — free to use and adapt for academic, personal, and commercial purposes

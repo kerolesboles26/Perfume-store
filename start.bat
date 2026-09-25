@@ -26,6 +26,6 @@ echo ========================================
 echo.
 
 :: Start the server
-node server.js
+node local_server/server.js
 
 pause

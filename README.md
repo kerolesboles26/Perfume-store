@@ -1,91 +1,136 @@
+# 👑 Royal Perfume Store — Luxury E-Commerce Web Application
 
-
-# 🌹 Royal Perfume Store — Luxury E-Commerce Web Application
 <div align="center">
 
-[![Watch Demo Video](https://img.shields.io/badge/▶%20Watch%20Demo%20Video-Play%20%2F%20Download-c9a227?style=for-the-badge&logoColor=white)](https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4)
-[![Release Version](https://img.shields.io/badge/Release-v1.0.0-blue?style=for-the-badge)](https://github.com/kerolesboles26/Perfume-store/releases/tag/v1.0.0)
+![Vercel Deployment](https://img.shields.io/badge/Deployment-Vercel%20Live-000000?style=for-the-badge&logo=vercel&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/🛍️%20Live%20Store-Visit%20Website-c9a227?style=for-the-badge)](https://perfume-store-azure-nine.vercel.app)
+[![Admin Panel](https://img.shields.io/badge/🛡️%20Admin%20Dashboard-Manage%20Orders-11131a?style=for-the-badge&logo=firebase&logoColor=c9a227)](https://perfume-store-azure-nine.vercel.app/admin.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-### 🎬 [اضغط هنا لمشاهدة فيديو استعراض المشروع الكامل | Full Project Demo](https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4)
+<br/>
 
-https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4
+> **An ultra-luxurious, production-ready fragrance boutique web application** built with pure Vanilla JavaScript (ES6+), Vanilla CSS, Firebase Cloud Firestore (Real-Time BaaS), WhatsApp Order Integration, and Progressive Web App (PWA) offline capabilities.
 
-</div>
+<br/>
 
-
-> An ultra-luxurious, full-stack responsive fragrance boutique web application featuring interactive checkout, order management, multi-language (Arabic/English) support, Firebase authentication, and Progressive Web App (PWA) installation.
+### 🌐 [Click Here to View Live Store on Vercel](https://perfume-store-azure-nine.vercel.app) | 🛡️ [Admin Control Panel](https://perfume-store-azure-nine.vercel.app/admin.html)
 
 ---
 
+### 🎬 [Watch Full Walkthrough Video Demo](https://github.com/kerolesboles26/Perfume-store/releases/download/v1.0.0/Video.Project.1.mp4)
 
+</div>
 
-## 🌟 Key Features
+---
 
-### 1. 💎 Luxury Visual Identity & Architecture
-- **Curated Royal Theme**: Gold accents (`#c9a227`), deep obsidian glassmorphism backgrounds (`#0d0e12`), and elegant typography.
-- **Bilingual (Arabic & English)**: Full instant RTL/LTR switching across all pages with zero reload lag.
-- **Progressive Web App (PWA)**: Installable directly onto mobile devices and desktop (via `manifest.json` and `sw.js` offline caching).
+## 🌟 Key Engineering & Business Features
 
-### 2. 🛍️ Browsing & Discovery Experience
-- **Dynamic Olfactory Filtering**: Filter by scent family (Fresh, Woody, Floral, Oriental/Oud, Aquatic, Fruity), gender (Men, Women, Unisex), and price tier.
-- **Live Search & Multi-criteria Sorting**: Search by perfume notes, ingredients, name; sort by popularity, rating, and price.
-- **Skeleton Loaders**: Golden shimmer placeholders ensuring zero perceived delay on listings.
-- **Interactive Ratings & Reviews Breakdown**: 5-star rating system with verified customer badge and rating distribution bar charts.
-- **Social Sharing**: One-click sharing directly to WhatsApp, LinkedIn, and instant clipboard link copy.
+### 1. 💎 Luxury Visual Identity & UI/UX
+* **Curated Royal Theme**: Gold accents (`#c9a227`), deep obsidian glassmorphism backgrounds (`#0d0e12`), and Google Fonts typography (Cinzel & Outfit / Cairo).
+* **Dark / Light Mode Toggle 🌙☀️**: Instant theme switcher persisted across user sessions via `localStorage` with silky smooth CSS transitions.
+* **Bilingual Engine (Arabic & English 🌐)**: Complete RTL (Right-to-Left) and LTR bidirectional switching across all 15+ pages with zero page-reload lag.
+* **Progressive Web App (PWA 📱)**: Full installability on iOS, Android, macOS, and Windows via `manifest.json` and `sw.js` Service Worker with offline asset caching.
 
-### 3. 💳 Cart, Checkout & Payment Simulation
-- **Persistent Cart & Wishlist**: Synchronized instantly between local browser state and Firebase Cloud Firestore.
-- **Interactive Promo Codes**: Supports discount coupons with live discount calculation (`LUXURY10`, `ROYAL20`).
-- **Interactive Payment Options**: Cash on Delivery and Credit Card with instant validation.
-- **Official Printable Invoice**: Auto-styled luxury printable receipt with royal seal and itemized breakdown (`printOrderInvoice`).
+### 2. 🛍️ Browsing, Olfactory Filtering & Discovery
+* **Dynamic Scent Family Filtering**: Filter by scent family (*Fresh, Woody, Floral, Oriental / Oud, Aquatic, Fruity*), target gender (*Men, Women, Unisex*), and price ranges.
+* **Live Search & Multi-criteria Sorting**: Search by ingredients, olfactory notes, or fragrance name; sort by popularity, customer ratings, and price.
+* **Skeleton Shimmer Loaders**: Golden skeleton loaders preventing any layout shift or perceived loading delays.
+* **Social Sharing**: One-click fragrance sharing directly to WhatsApp, LinkedIn, or instant clipboard copy.
 
-### 4. 📦 Real-Time Order Management & Tracking
-- **Interactive Stepper Tracking**: Visual 4-stage tracking (Order Received 📝 ➔ Luxury Packing 🎁 ➔ Out for Delivery 🚚 ➔ Delivered ✨).
-- **Instant Actions (No Annoying Popups)**: Non-blocking instant order cancellation and permanent order deletion with smooth scale/fade micro-animations.
-- **Admin Management Dashboard (`admin.html`)**: Real-time sales metrics, order counters, customer tracking, and status update controls with sleek toast feedback.
+### 3. 💳 Cart, Checkout & WhatsApp Order Confirmation
+* **Real-time Synchronized Cart & Wishlist**: Cloud-synced state between client browser cache and Firebase Cloud Firestore.
+* **Interactive Promo System**: Dynamic discount codes with instant total deductions (`LUXURY10`, `ROYAL20`).
+* **WhatsApp Order Notification 💬**: Instant dispatch of itemized order summaries directly to the store manager's WhatsApp (`01208077173`).
+* **Official Printable Receipt**: Auto-generated luxury printable invoice with royal stamp and tax/discount breakdown (`printOrderInvoice`).
+
+### 4. 📦 Real-Time Order Tracking & Admin Control Panel
+* **Live 4-Stage Stepper Tracking**: Real-time visual progress tracker:
+  `Order Received 📝 ➔ Luxury Packing 🎁 ➔ Out for Delivery 🚚 ➔ Delivered ✨`
+* **Real-Time Admin Dashboard (`admin.html`)**:
+  * Live revenue counters, active orders count, and unique customer statistics.
+  * Real-time search by customer name, phone number, or order ID.
+  * Instant status update dropdown (changes reflect on customer tracker in real time).
+  * Direct WhatsApp customer contact button & permanent deletion controls.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Vanilla JavaScript (ES6+), Semantic HTML5, Pure Vanilla CSS (No heavyweight UI frameworks, high performance).
-- **Backend & Serving**: Node.js HTTP Server (`server.js`).
-- **Database & Auth**: Firebase Auth (Email/Password, Google OAuth), Cloud Firestore for orders, wishlist, and cart persistence.
-- **PWA & Offline**: Web App Manifest, Service Worker Cache API.
+```mermaid
+graph TD
+    A[Frontend: Vanilla HTML5 / Pure CSS3 / ES6+ JS] --> B[Firebase BaaS: Authentication + Cloud Firestore]
+    A --> C[PWA Engine: Service Worker v4 + Manifest]
+    A --> D[Hosting: Vercel Global Edge Network]
+    A --> E[Messaging: WhatsApp Business API Dispatch]
+```
+
+| Component | Technology / Service | Details |
+|---|---|---|
+| **Architecture** | Jamstack / Vanilla ES6+ | No bloated frameworks; ultra-lightweight, 60fps animations |
+| **Styling** | Pure Vanilla CSS | Custom design tokens, glassmorphism, responsive Grid & Flexbox |
+| **Database & Auth** | Firebase Cloud Firestore | Real-time `onSnapshot` listeners, Google OAuth & Email/Password Auth |
+| **Offline & PWA** | Service Worker (`sw.js`) | Offline cache-first strategy for zero-latency asset loads |
+| **Hosting & CI/CD** | Vercel Edge Network | Instant CDN delivery with automatic GitHub branch deployments |
+| **Integration** | WhatsApp Web API | Automated structured message payload generation |
 
 ---
 
-## 🚀 One-Click Quick Start
+## 📂 Project Architecture
 
-### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed.
-
-### Start the Application
-Simply double-click the **`start.bat`** file in the project folder:
-```cmd
-start.bat
+```text
+Perfume-store/
+├── index.html              # Luxury Landing & Showcase Page
+├── products.html           # Catalog with Multi-Facet Filtering
+├── product-details.html    # Detailed Perfume View & Fragrance Notes
+├── cart.html               # Shopping Cart & Quantity Manager
+├── checkout.html           # Checkout Flow & Promo Codes
+├── order-history.html      # Real-Time Order Management & Stepper Tracker
+├── order-success.html      # Post-Checkout Confirmation & Invoice
+├── profile.html            # User Account, Password & Profile Management
+├── wishlist.html           # Saved Favorites Collection
+├── admin.html              # Store Management & Real-Time Analytics
+├── about.html              # Brand Story & Craftsmanship
+├── contact.html            # Customer Inquiries & Store Location
+├── app.js                  # Core Store Engine & UI State Management
+├── firebase-auth.js        # Firestore Sync, Auth & Real-Time Listeners
+├── admin.js                # Admin Dashboard Real-Time Logic & Metrics
+├── style.css               # Comprehensive Luxury CSS Design System
+├── admin.css               # Admin Control Panel Styling
+├── sw.js                   # Service Worker (PWA Offline Cache v4)
+├── manifest.json           # Progressive Web App Configuration
+├── vercel.json             # Vercel Production Static Edge Config
+└── local_server/           # Local Development Server
+    └── server.js
 ```
-This will automatically launch the server and open **`http://localhost:5000`** in your default web browser!
 
-Or run manually via terminal:
+---
+
+## ⚡ Quick Local Development Setup
+
+### 1. Clone the repository
 ```bash
-node server.js
+git clone https://github.com/kerolesboles26/Perfume-store.git
+cd Perfume-store
 ```
+
+### 2. Run Local Server
+* **On Windows**: Double-click `start.bat`
+* **Via Terminal**:
+```bash
+node local_server/server.js
+```
+Then navigate to `http://localhost:5000` in your browser.
 
 ---
 
-## 🎬 LinkedIn Demo Video Script (Recommended 90-Second Walkthrough)
+## 👨‍💻 Author & Developer
 
-1. **0:00 - 0:15 | Hero & Aesthetics**:
-   - Show the landing page, hover effects, and switch language between **English** and **العربية (RTL)**.
-2. **0:15 - 0:30 | Product Discovery**:
-   - Open **Products**, filter by *Oriental / Oud* or *Men*, use search, and open a product details page.
-   - Show the fragrance notes, rating breakdown, and click the **Share** button (highlighting LinkedIn & WhatsApp).
-3. **0:30 - 0:50 | Cart & Checkout**:
-   - Add fragrance to cart, apply coupon `ROYAL20`, complete the checkout flow.
-4. **0:50 - 1:10 | Order Tracking & Invoice**:
-   - View the **Order Confirmed** screen and **My Orders** page.
-   - Show the 4-step progress tracker, print the luxury invoice preview, and demonstrate instant **Cancel** or **Delete Order**.
-5. **1:10 - 1:30 | Admin Dashboard & PWA**:
-   - Open `/admin.html` to showcase live sales statistics and order status updates.
-   - Highlight the "Install App" PWA capability in the browser address bar.
+* **Keroles Boles**
+* **GitHub**: [@kerolesboles26](https://github.com/kerolesboles26)
+* **Project Repository**: [Perfume-store](https://github.com/kerolesboles26/Perfume-store)
+* **Live Deployment**: [perfume-store-azure-nine.vercel.app](https://perfume-store-azure-nine.vercel.app)
+
+---
+
+## 📄 License
+This project is licensed under the [MIT License](LICENSE) — free to use and adapt for academic, personal, and commercial purposes.

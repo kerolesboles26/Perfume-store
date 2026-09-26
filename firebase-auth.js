@@ -4,6 +4,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     signInWithRedirect,
+    getRedirectResult,
     sendPasswordResetEmail,
     signOut,
     createUserWithEmailAndPassword,
@@ -326,6 +327,31 @@ const googleProvider = new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
     prompt: "login"
+});
+
+// Handle Redirect Sign-In result on page load
+getRedirectResult(auth).then(async (result) => {
+    if (result && result.user) {
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+            name: user.displayName || "User",
+            email: user.email || "",
+            photo: user.photoURL || ""
+        }, { merge: true });
+
+        localStorage.setItem("user", JSON.stringify({
+            name: user.displayName || "User",
+            email: user.email || "",
+            photo: user.photoURL || "",
+            provider: "google"
+        }));
+
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "products.html";
+    }
+}).catch((error) => {
+    console.error("Redirect Result Error:", error);
 });
 
 

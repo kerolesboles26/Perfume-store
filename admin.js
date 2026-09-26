@@ -22,9 +22,11 @@ async function verifyAdminAuth() {
 
     if (!user || user.email !== ADMIN_EMAIL || !sessionActive) {
         sessionStorage.removeItem("admin_login_verified");
-        window.location.href = "admin-login.html";
+        window.location.replace("admin-login.html");
         return false;
     }
+
+    document.body.classList.add("admin-authenticated");
     return true;
 }
 

@@ -3,6 +3,7 @@ import {
     getAuth,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithRedirect,
     sendPasswordResetEmail,
     signOut,
     createUserWithEmailAndPassword,
@@ -355,10 +356,18 @@ async function handleGoogleLogin() {
 
     } catch (error) {
         console.error("Google Auth Error:", error.code, error.message);
-        if (typeof showNotification === "function") {
+        if (error.code === "auth/unauthorized-domain") {
+            alert("⚠️ Domain Not Authorized: Please add 'perfume-store-azure-nine.vercel.app' to Authorized Domains in Firebase Console -> Authentication -> Settings -> Authorized Domains.");
+        } else if (error.code === "auth/popup-blocked" || error.code === "auth/popup-closed-by-user") {
+            try {
+                await signInWithRedirect(auth, googleProvider);
+            } catch (redErr) {
+                console.error("Redirect login error:", redErr);
+            }
+        } else if (typeof showNotification === "function") {
             showNotification(error.message || "Failed to sign in with Google", "error");
         } else {
-            alert("Google Sign In Error: " + error.message);
+            alert("Google Sign In Error: " + (error.message || error.code));
         }
     }
 }

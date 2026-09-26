@@ -132,23 +132,34 @@
 
         .form-group input {
             width: 100%;
-            background: rgba(5, 7, 18, 0.8);
-            border: 1px solid var(--border);
+            background: #0d0f1b !important;
+            border: 1px solid var(--border) !important;
             border-radius: 12px;
             padding: 13px 16px 13px 42px;
-            color: var(--text);
+            color: #ffffff !important;
             font-family: 'Outfit', sans-serif;
             font-size: 0.95rem;
             outline: none;
             transition: all 0.3s ease;
         }
 
+        /* Chrome/Edge Autofill Override to prevent transparent or white background */
+        .form-group input:-webkit-autofill,
+        .form-group input:-webkit-autofill:hover, 
+        .form-group input:-webkit-autofill:focus, 
+        .form-group input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #0d0f1b inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border: 1px solid #d4a843 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
         .form-group input:focus {
-            border-color: var(--gold-bright);
+            border-color: var(--gold-bright) !important;
             box-shadow: 0 0 0 3px rgba(212,168,67,0.15), 0 0 20px rgba(212,168,67,0.2);
         }
 
-        .form-group input::placeholder { color: #3a405a; }
+        .form-group input::placeholder { color: #7a85a8 !important; }
 
         .eye-btn {
             position: absolute;
@@ -323,9 +334,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Already logged in as admin? skip login
+        // Already logged in as admin in current session? skip login
         onAuthStateChanged(auth, (user) => {
-            if (user && user.email === ADMIN_EMAIL) {
+            if (user && user.email === ADMIN_EMAIL && sessionStorage.getItem("admin_login_verified") === "true") {
                 window.location.href = "admin.html";
             }
         });
@@ -357,6 +368,7 @@
             try {
                 // First attempt normal sign in
                 await signInWithEmailAndPassword(auth, email, password);
+                sessionStorage.setItem("admin_login_verified", "true");
                 successAlert.textContent = "✅ Access granted! Redirecting...";
                 successAlert.style.display = "block";
                 setTimeout(() => { window.location.href = "admin.html"; }, 1000);
@@ -365,6 +377,7 @@
                 if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
                     try {
                         await createUserWithEmailAndPassword(auth, email, password);
+                        sessionStorage.setItem("admin_login_verified", "true");
                         successAlert.textContent = "👑 Welcome Admin! Account activated. Redirecting...";
                         successAlert.style.display = "block";
                         setTimeout(() => { window.location.href = "admin.html"; }, 1000);

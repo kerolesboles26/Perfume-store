@@ -18,7 +18,10 @@ async function verifyAdminAuth() {
         await window.firebaseReady;
     }
     const user = window.firebaseCurrentUser;
-    if (!user || user.email !== ADMIN_EMAIL) {
+    const sessionActive = sessionStorage.getItem("admin_login_verified") === "true";
+
+    if (!user || user.email !== ADMIN_EMAIL || !sessionActive) {
+        sessionStorage.removeItem("admin_login_verified");
         window.location.href = "admin-login.html";
         return false;
     }
@@ -600,6 +603,7 @@ function initAdminEvents() {
     const logoutBtn = document.getElementById("adminLogoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", async () => {
+            sessionStorage.removeItem("admin_login_verified");
             try {
                 const auth = getAuth();
                 await signOut(auth);

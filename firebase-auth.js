@@ -277,6 +277,15 @@ window.clearAllUserOrdersFirebase = async function () {
         try {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             await setDoc(userRef, { orders: [] }, { merge: true });
+
+            const ordersCol = collection(db, "orders");
+            const snap = await getDocs(ordersCol);
+            snap.forEach(async (d) => {
+                const data = d.data();
+                if (data.userId === currentFirebaseUser.uid || data.userEmail === currentFirebaseUser.email) {
+                    await deleteDoc(doc(db, "orders", d.id));
+                }
+            });
         } catch (error) {
             console.error("Firestore Clear Orders Error:", error);
         }

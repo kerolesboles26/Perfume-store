@@ -2544,7 +2544,7 @@ function displayOrderDetails() {
         <!-- Action Row -->
         <div class="order-action-buttons">
             <button onclick="printOrderInvoice('${orderIdStr}')" class="invoice-action-btn">🖨️ ${t("printInvoice")}</button>
-            ${order.status === "pending" || !order.status ? `
+            ${!isCancelled ? `
                 <button onclick="cancelOrder('${orderIdStr}')" class="cancel-action-btn">✕ ${t("cancelOrder")}</button>
             ` : ""}
             <button onclick="deleteOrder('${orderIdStr}')" class="delete-order-btn">🗑️ ${t("deleteOrder")}</button>
@@ -2656,7 +2656,7 @@ async function displayOrders(skipFirebase = false) {
                 <div class="order-action-buttons">
                     <button onclick="sendOrderToWhatsApp('${orderIdStr}')" class="invoice-action-btn" style="background:rgba(37,211,102,0.15); border-color:#25D366; color:#25D366;">💬 ${currentLanguage === "ar" ? "واتساب" : "WhatsApp"}</button>
                     <button onclick="printOrderInvoice('${orderIdStr}')" class="invoice-action-btn">🖨️ ${t("printInvoice")}</button>
-                    ${isPending ? `
+                    ${!isCancelled ? `
                         <button onclick="cancelOrder('${orderIdStr}')" class="cancel-action-btn">✕ ${t("cancelOrder")}</button>
                     ` : ""}
                     <button onclick="deleteOrder('${orderIdStr}')" class="delete-order-btn">🗑️ ${t("deleteOrder")}</button>

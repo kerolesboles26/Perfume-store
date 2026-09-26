@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Admin Dashboard | Perfume Store 🌹</title>
     <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./admin.css">
+    <script>
+        // Instant 0ms security check before DOM body parses or displays
+        if (sessionStorage.getItem("admin_login_verified") !== "true") {
+            window.location.replace("admin-login.html");
+        }
+    </script>
+    <style>
+        /* Hide layout until fully authenticated by Firebase */
+        body { visibility: hidden; opacity: 0; transition: opacity 0.2s ease; }
+        body.admin-authenticated { visibility: visible; opacity: 1; }
+    </style>
 </head>
 <body>
     <div class="admin-layout" id="adminLayout">

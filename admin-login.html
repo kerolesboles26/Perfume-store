@@ -293,14 +293,14 @@
                 <label for="adminEmail">Admin Email</label>
                 <div class="input-wrapper">
                     <span class="input-icon">📧</span>
-                    <input type="email" id="adminEmail" placeholder="admin@keroperfume.com" required autocomplete="off">
+                    <input type="email" id="adminEmail" placeholder="Enter Admin Email" required autocomplete="off" value="">
                 </div>
             </div>
             <div class="form-group">
                 <label for="adminPassword">Password</label>
                 <div class="input-wrapper">
                     <span class="input-icon">🔑</span>
-                    <input type="password" id="adminPassword" placeholder="••••••••••" required autocomplete="off">
+                    <input type="password" id="adminPassword" placeholder="••••••••••" required autocomplete="new-password" value="">
                     <button type="button" class="eye-btn" id="eyeBtn">👁️</button>
                 </div>
             </div>
@@ -347,6 +347,9 @@
         const successAlert = document.getElementById("successAlert");
         const card = document.getElementById("loginCard");
         const deniedOverlay = document.getElementById("deniedOverlay");
+
+        // Clear input fields on load
+        if (form) form.reset();
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();

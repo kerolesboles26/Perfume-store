@@ -5,6 +5,7 @@ import {
     getDoc,
     doc, 
     setDoc, 
+    addDoc,
     deleteDoc,
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
@@ -233,12 +234,17 @@ async function loadAdminOrders() {
                 orders.push({ firebaseId: docSnap.id, ...docSnap.data() });
             });
 
-            // Merge with LocalStorage orders to avoid duplicates and ensure local tests show up
+            // Merge & auto-sync with LocalStorage orders so local tests automatically upload to Cloud Firestore
             const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
-            localOrders.forEach(loc => {
+            localOrders.forEach(async (loc) => {
                 const exists = orders.some(o => String(o.id) === String(loc.id));
                 if (!exists) {
                     orders.push(loc);
+                    try {
+                        await addDoc(ordersCol, loc);
+                    } catch (e) {
+                        console.warn("Firestore Order Sync Warning:", e);
+                    }
                 } else {
                     // Sync status if local has newer status (e.g. cancelled)
                     const idx = orders.findIndex(o => String(o.id) === String(loc.id));

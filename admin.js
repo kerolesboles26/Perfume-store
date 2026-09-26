@@ -9,6 +9,33 @@ import {
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+const ADMIN_EMAIL = "admin@keroperfume.com";
+
+async function verifyAdminAuth() {
+    if (window.firebaseReady) {
+        await window.firebaseReady;
+    }
+    const user = window.firebaseCurrentUser;
+    if (!user || user.email !== ADMIN_EMAIL) {
+        window.location.href = "admin-login.html";
+        return false;
+    }
+    return true;
+}
+
+// ================= SECURITY SANITIZATION =================
+function escapeHTML(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 // ================= ADMIN I18N DICTIONARY =================
 const adminTranslations = {
     en: {
@@ -318,14 +345,14 @@ function renderFilteredOrders() {
         else if (currentStatus === "cancelled") statusText = at("statusCancelled");
 
         return `
-            <tr id="admin-row-${orderIdStr}">
-                <td style="font-weight:700; color:var(--gold2, #c9a227);"><span style='display:block; font-size:13px;'>#${orderIdStr.slice(-8)}</span></td>
+            <tr id="admin-row-${escapeHTML(orderIdStr)}">
+                <td style="font-weight:700; color:var(--gold2, #c9a227);"><span style='display:block; font-size:13px;'>#${escapeHTML(orderIdStr.slice(-8))}</span></td>
                 <td>
-                    <div style="font-weight:700; color:#fff; margin-bottom:3px;">${o.customer?.fullName || 'Guest'}</div>
-                    <div style="font-size:11px; color:#25D366; font-weight:600;">📞 ${o.customer?.phone || '—'}</div>
-                    <div style="font-size:11px; color:#888;">${o.userEmail || ''}</div>
+                    <div style="font-weight:700; color:#fff; margin-bottom:3px;">${escapeHTML(o.customer?.fullName || 'Guest')}</div>
+                    <div style="font-size:11px; color:#25D366; font-weight:600;">📞 ${escapeHTML(o.customer?.phone || '—')}</div>
+                    <div style="font-size:11px; color:#888;">${escapeHTML(o.userEmail || '')}</div>
                 </td>
-                <td style="font-size:12px; color:#aaa; min-width:120px;">${o.date || 'N/A'}</td>
+                <td style="font-size:12px; color:#aaa; min-width:120px;">${escapeHTML(o.date || 'N/A')}</td>
                 <td style="color:var(--gold2, #c9a227); font-weight:800; font-size:15px; white-space:nowrap;">
                     ${Number(o.total || 0).toLocaleString()} EGP
                 </td>
@@ -568,9 +595,26 @@ function initAdminEvents() {
             showAdminNotification(currentAdminLang === "ar" ? "تم تحديث البيانات! ✓" : "Orders refreshed! ✓");
         });
     }
+
+    // Logout Button
+    const logoutBtn = document.getElementById("adminLogoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                const auth = getAuth();
+                await signOut(auth);
+            } catch (e) {
+                console.error("Sign out error:", e);
+            }
+            window.location.href = "admin-login.html";
+        });
+    }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    const isAuthorized = await verifyAdminAuth();
+    if (!isAuthorized) return;
+
     applyAdminLanguage();
     initAdminEvents();
     loadAdminOrders();

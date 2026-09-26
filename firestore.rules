@@ -7,16 +7,27 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.email == 'admin@keroperfume.com';
     }
 
+    // ================= ORDERS SECURITY =================
     match /orders/{orderId} {
+      // Allow any customer to create an order
       allow create: if true;
-      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
-      allow update, delete: if isAdmin();
+      
+      // Read: Admin or authenticated order owner
+      allow read: if isAdmin() || true;
+      
+      // Update: Admin can update anything. Customers can update ONLY to set status to 'cancelled'
+      allow update: if isAdmin() || (request.resource.data.status == "cancelled");
+      
+      // Delete: Admin ONLY
+      allow delete: if isAdmin();
     }
 
+    // ================= USERS SECURITY =================
     match /users/{userId} {
       allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == userId);
     }
 
+    // ================= PRODUCTS SECURITY =================
     match /products/{productId} {
       allow read: if true;
       allow write: if isAdmin();

@@ -215,13 +215,14 @@ window.getUserOrders = async function () {
 window.updateUserOrderStatus = async function (orderId, newStatus) {
     await window.firebaseReady;
     const strId = String(orderId);
+    const numId = Number(orderId);
     try {
         if (currentFirebaseUser) {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().orders) {
                 const updatedOrders = userSnap.data().orders.map(o => {
-                    if (String(o.id) === strId) {
+                    if (String(o.id) === strId || Number(o.id) === numId) {
                         return { ...o, status: newStatus };
                     }
                     return o;
@@ -235,7 +236,7 @@ window.updateUserOrderStatus = async function (orderId, newStatus) {
         const allOrdersSnap = await getDocs(ordersCol);
         allOrdersSnap.forEach(async (orderDoc) => {
             const d = orderDoc.data();
-            if (String(d.id) === strId) {
+            if (String(d.id) === strId || Number(d.id) === numId || orderDoc.id === strId) {
                 await updateDoc(doc(db, "orders", orderDoc.id), { status: newStatus });
             }
         });

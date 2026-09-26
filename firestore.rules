@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'admin@keroperfume.com';
+    }
+
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == userId);
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

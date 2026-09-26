@@ -2348,46 +2348,50 @@ window.cancelOrder = async function(orderId) {
         return o;
     });
 
-    if (updated) {
-        localStorage.setItem("orders", JSON.stringify(orders));
-
-        const lastOrder = JSON.parse(localStorage.getItem("lastOrder"));
-        if (lastOrder && String(lastOrder.id) === strId) {
-            lastOrder.status = "cancelled";
-            localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
-        }
-
-        // Sync cancellation to Firebase in background without duplicating
-        if (typeof window.updateUserOrderStatus === "function") {
-            window.updateUserOrderStatus(strId, "cancelled").catch(() => {});
-        }
-
-        showNotification(t("orderCancelled"), "success");
-
-        // Instant in-place DOM update (zero flicker, zero duplication)
-        const cardEl = document.getElementById(`order-${strId}`);
-        if (cardEl) {
-            const badge = cardEl.querySelector(".order-status-badge");
-            if (badge) {
-                badge.textContent = currentLanguage === "ar" ? "ملغي ✕" : "Cancelled ✕";
-                badge.style.background = "rgba(220, 53, 69, 0.15)";
-                badge.style.borderColor = "rgba(220, 53, 69, 0.4)";
-                badge.style.color = "#ff6b6b";
-            }
-            const trackerContainer = cardEl.querySelector(".order-tracker-container");
-            if (trackerContainer) {
-                trackerContainer.innerHTML = renderOrderTracker("cancelled");
-            }
-            const cancelBtn = cardEl.querySelector(".cancel-action-btn");
-            if (cancelBtn) {
-                cancelBtn.remove();
-            }
-        } else {
-            if (typeof displayOrders === "function") displayOrders(true);
-        }
-
-        if (typeof displayOrderDetails === "function") displayOrderDetails();
+    if (!updated) {
+        orders.push({ id: strId, status: "cancelled", date: new Date().toLocaleDateString() });
     }
+
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    const lastOrder = JSON.parse(localStorage.getItem("lastOrder"));
+    if (lastOrder && String(lastOrder.id) === strId) {
+        lastOrder.status = "cancelled";
+        localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+    }
+
+    // ALWAYS sync cancellation to Firebase in background
+    if (typeof window.updateUserOrderStatus === "function") {
+        window.updateUserOrderStatus(strId, "cancelled").catch((err) => {
+            console.error("Failed to sync cancel to Firebase:", err);
+        });
+    }
+
+    showNotification(t("orderCancelled"), "success");
+
+    // Instant in-place DOM update (zero flicker, zero duplication)
+    const cardEl = document.getElementById(`order-${strId}`);
+    if (cardEl) {
+        const badge = cardEl.querySelector(".order-status-badge");
+        if (badge) {
+            badge.textContent = currentLanguage === "ar" ? "ملغي ✕" : "Cancelled ✕";
+            badge.style.background = "rgba(220, 53, 69, 0.15)";
+            badge.style.borderColor = "rgba(220, 53, 69, 0.4)";
+            badge.style.color = "#ff6b6b";
+        }
+        const trackerContainer = cardEl.querySelector(".order-tracker-container");
+        if (trackerContainer) {
+            trackerContainer.innerHTML = renderOrderTracker("cancelled");
+        }
+        const cancelBtn = cardEl.querySelector(".cancel-action-btn");
+        if (cancelBtn) {
+            cancelBtn.remove();
+        }
+    } else {
+        if (typeof displayOrders === "function") displayOrders(true);
+    }
+
+    if (typeof displayOrderDetails === "function") displayOrderDetails();
 };
 
 window.deleteOrder = async function(orderId) {

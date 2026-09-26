@@ -234,12 +234,12 @@ window.updateUserOrderStatus = async function (orderId, newStatus) {
         // Sync with global "orders" collection for admin dashboard
         const ordersCol = collection(db, "orders");
         const allOrdersSnap = await getDocs(ordersCol);
-        allOrdersSnap.forEach(async (orderDoc) => {
+        for (const orderDoc of allOrdersSnap.docs) {
             const d = orderDoc.data();
             if (String(d.id) === strId || Number(d.id) === numId || orderDoc.id === strId) {
                 await updateDoc(doc(db, "orders", orderDoc.id), { status: newStatus });
             }
-        });
+        }
     } catch (error) {
         console.error("Firestore Update Order Status Error:", error);
     }
@@ -248,12 +248,13 @@ window.updateUserOrderStatus = async function (orderId, newStatus) {
 window.deleteUserOrderFirebase = async function (orderId) {
     await window.firebaseReady;
     const strId = String(orderId);
+    const numId = Number(orderId);
     try {
         if (currentFirebaseUser) {
             const userRef = doc(db, "users", currentFirebaseUser.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists() && userSnap.data().orders) {
-                const updatedOrders = userSnap.data().orders.filter(o => String(o.id) !== strId);
+                const updatedOrders = userSnap.data().orders.filter(o => String(o.id) !== strId && Number(o.id) !== numId);
                 await setDoc(userRef, { orders: updatedOrders }, { merge: true });
             }
         }
@@ -261,12 +262,12 @@ window.deleteUserOrderFirebase = async function (orderId) {
         // Delete from global "orders" collection for admin dashboard
         const ordersCol = collection(db, "orders");
         const allOrdersSnap = await getDocs(ordersCol);
-        allOrdersSnap.forEach(async (orderDoc) => {
+        for (const orderDoc of allOrdersSnap.docs) {
             const d = orderDoc.data();
-            if (String(d.id) === strId) {
+            if (String(d.id) === strId || Number(d.id) === numId || orderDoc.id === strId) {
                 await deleteDoc(doc(db, "orders", orderDoc.id));
             }
-        });
+        }
     } catch (error) {
         console.error("Firestore Delete Order Error:", error);
     }
@@ -281,12 +282,12 @@ window.clearAllUserOrdersFirebase = async function () {
 
             const ordersCol = collection(db, "orders");
             const snap = await getDocs(ordersCol);
-            snap.forEach(async (d) => {
+            for (const d of snap.docs) {
                 const data = d.data();
                 if (data.userId === currentFirebaseUser.uid || data.userEmail === currentFirebaseUser.email) {
                     await deleteDoc(doc(db, "orders", d.id));
                 }
-            });
+            }
         } catch (error) {
             console.error("Firestore Clear Orders Error:", error);
         }

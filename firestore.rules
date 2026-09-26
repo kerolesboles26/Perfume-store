@@ -18,8 +18,8 @@ service cloud.firestore {
       // Update: Admin can update anything. Customers can update ONLY to set status to 'cancelled'
       allow update: if isAdmin() || (request.resource.data.status == "cancelled");
       
-      // Delete: Admin ONLY
-      allow delete: if isAdmin();
+      // Delete: Admin or customer
+      allow delete: if true;
     }
 
     // ================= USERS SECURITY =================

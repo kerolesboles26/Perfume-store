@@ -234,26 +234,6 @@ async function loadAdminOrders() {
                 orders.push({ firebaseId: docSnap.id, ...docSnap.data() });
             });
 
-            // Merge & auto-sync with LocalStorage orders so local tests automatically upload to Cloud Firestore
-            const localOrders = JSON.parse(localStorage.getItem("orders")) || [];
-            localOrders.forEach(async (loc) => {
-                const exists = orders.some(o => String(o.id) === String(loc.id));
-                if (!exists) {
-                    orders.push(loc);
-                    try {
-                        await addDoc(ordersCol, loc);
-                    } catch (e) {
-                        console.warn("Firestore Order Sync Warning:", e);
-                    }
-                } else {
-                    // Sync status if local has newer status (e.g. cancelled)
-                    const idx = orders.findIndex(o => String(o.id) === String(loc.id));
-                    if (idx !== -1 && loc.status === "cancelled") {
-                        orders[idx].status = "cancelled";
-                    }
-                }
-            });
-
             // Remove strict exact duplicates if multiple submitted with identical ID
             const uniqueMap = new Map();
             orders.forEach(o => {
@@ -261,7 +241,7 @@ async function loadAdminOrders() {
                 if (!uniqueMap.has(key)) {
                     uniqueMap.set(key, o);
                 } else {
-                    // Keep the one with status if available
+                    // Keep the one with cancelled status if available
                     const existing = uniqueMap.get(key);
                     if (o.status === "cancelled") {
                         uniqueMap.set(key, o);
@@ -419,11 +399,11 @@ window.updateOrderStatus = async function(orderId) {
         } else {
             const ordersCol = collection(db, "orders");
             const snap = await getDocs(ordersCol);
-            snap.forEach(async (d) => {
-                if (String(d.data().id) === String(orderId)) {
+            for (const d of snap.docs) {
+                if (String(d.data().id) === String(orderId) || String(d.id) === String(orderId)) {
                     await setDoc(doc(db, "orders", d.id), { status: newStatus }, { merge: true });
                 }
-            });
+            }
         }
 
         // 2. Update user document if userId present
@@ -485,11 +465,11 @@ window.adminDeleteOrder = async function(orderId) {
         const db = getFirestore();
         const ordersCol = collection(db, "orders");
         const snap = await getDocs(ordersCol);
-        snap.forEach(async (d) => {
+        for (const d of snap.docs) {
             if (String(d.data().id) === String(orderId) || String(d.id) === String(orderId)) {
                 await deleteDoc(doc(db, "orders", d.id));
             }
-        });
+        }
 
         // Delete from localStorage
         let localOrders = JSON.parse(localStorage.getItem("orders")) || [];
